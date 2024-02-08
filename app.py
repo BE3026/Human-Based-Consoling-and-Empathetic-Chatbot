@@ -7,7 +7,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense,Dropout,Flatten
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D
-import chat
+
 
 
 df=pd.read_csv('muse_v3.csv')
@@ -64,9 +64,27 @@ for ind,row in df2.iterrows():
     if('Family' in row['genres'] and o<10):
         df2_family=df2_family._append(row)
         o=o+1
+df3=pd.read_csv('regional_metadata.csv')
+df3_sad=pd.DataFrame()
+df3_fear=pd.DataFrame()
+df3_angry=pd.DataFrame()
+df3_neutral=pd.DataFrame()
+df3_happy=pd.DataFrame()
+for ind,row in df3.iterrows():
+    if('sad' in row['Emotion']):
+        df3_sad=df3_sad._append(row)
+    if('fear' in row['Emotion']):
+        df3_fear=df3_fear._append(row)
+    if('angry' in row['Emotion']):
+        df3_angry=df3_angry._append(row)
+    if('happy' in row['Emotion']):
+        df3_happy=df3_happy._append(row)
+    if('neutral' in row['Emotion']):
+        df3_neutral=df3_neutral._append(row)
 def fun(list):
     data=pd.DataFrame()
     movie_data=pd.DataFrame()
+    data2=pd.DataFrame()
     if len(list)==1:
         v=list[0]
         t=30
@@ -74,29 +92,32 @@ def fun(list):
             data=data._append(df_neutral.sample(n=t))
             movie_data=movie_data._append(df2_adventure)
             movie_data=movie_data._append(df2_action)
-
+            data2=data2._append(df3_neutral)
         elif v== 'Angry':
             data=data._append(df_angry.sample(n=t))
             movie_data=movie_data._append(df2_drama)
             movie_data=movie_data._append(df2_comedy)
             movie_data=movie_data._append(df2_family)
+            data2=data2._append(df3_angry)
         elif v=='fear':
             data=data._append(df_fear.sample(n=t))
             movie_data=movie_data._append(df2_drama)
             movie_data=movie_data._append(df2_comedy)
             movie_data=movie_data._append(df2_family)
+            data2=data2._append(df3_fear)
         elif v=='happy':
             data=data._append(df_happy.sample(n=t))
             movie_data=movie_data._append(df2_adventure)
             movie_data=movie_data._append(df2_action)
             movie_data=movie_data._append(df2_horror)
             movie_data=movie_data._append(df2_adventure)
-
+            data2=data2._append(df3_happy)
         else:
             data=data._append(df_sad.sample(n=t))
             movie_data=movie_data._append(df2_drama)
             movie_data=movie_data._append(df2_comedy)
             movie_data=movie_data._append(df2_family)
+            data2=data2._append(df3_sad)
 
     elif len(list)==2:
         times = [20,10]
@@ -107,28 +128,32 @@ def fun(list):
                 data=data._append(df_neutral.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
+                data2=data2._append(df3_neutral)
             elif v== 'Angry':
                 data=data._append(df_angry.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_angry)
             elif v=='fear':
                 data=data._append(df_fear.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_fear)
             elif v=='happy':
                 data=data._append(df_happy.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
                 movie_data=movie_data._append(df2_horror)
                 movie_data=movie_data._append(df2_adventure)
-
+                data2=data2._append(df3_happy)
             else:
                 data=data._append(df_sad.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_sad)
     elif len(list)==3:
         times = [15,10,5]
         for i in range(len(list)):
@@ -138,27 +163,32 @@ def fun(list):
                 data=data._append(df_neutral.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
+                data2=data2._append(df3_neutral)
             elif v== 'Angry':
                 data=data._append(df_angry.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_angry)
             elif v=='fear':
                 data=data._append(df_fear.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_fear)
             elif v=='happy':
                 data=data._append(df_happy.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
                 movie_data=movie_data._append(df2_horror)
                 movie_data=movie_data._append(df2_adventure)
+                data2=data2._append(df3_happy)
             else:
                 data=data._append(df_sad.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
-                movie_data=movie_data._append(df2_family)  
+                movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_sad)  
     elif len(list)==4:
         times = [10,9,8,3]
         for i in range(len(list)):
@@ -168,27 +198,32 @@ def fun(list):
                 data=data._append(df_neutral.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
+                data2=data2._append(df3_neutral)
             elif v== 'Angry':
                 data=data._append(df_angry.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_angry)
             elif v=='fear':
                 data=data._append(df_fear.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
                 movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_fear)
             elif v=='happy':
                 data=data._append(df_happy.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
                 movie_data=movie_data._append(df2_horror)
                 movie_data=movie_data._append(df2_adventure)
+                data2=data2._append(df3_happy)
             else:
                 data=data._append(df_sad.sample(n=t)) 
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
-                movie_data=movie_data._append(df2_family)   
+                movie_data=movie_data._append(df2_family) 
+                data2=data2._append(df3_sad)  
     else:
         times = [10,7,6,5,2]
         for i in range(len(list)):
@@ -198,29 +233,34 @@ def fun(list):
                 data=data._append(df_neutral.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
+                data2=data2._append(df3_neutral)
             elif v== 'Angry':
                 data=data._append(df_angry.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
-                movie_data=movie_data._append(df2_family)      
+                movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_angry)      
             elif v=='fear':
                 data=data._append(df_fear.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
-                movie_data=movie_data._append(df2_family)  
+                movie_data=movie_data._append(df2_family) 
+                data2=data2._append(df3_fear) 
             elif v=='happy':
                 data=data._append(df_happy.sample(n=t))
                 movie_data=movie_data._append(df2_adventure)
                 movie_data=movie_data._append(df2_action)
                 movie_data=movie_data._append(df2_horror)
                 movie_data=movie_data._append(df2_adventure)
+                data2=data2._append(df3_happy)
             else:
                 data=data._append(df_sad.sample(n=t))
                 movie_data=movie_data._append(df2_drama)
                 movie_data=movie_data._append(df2_comedy)
-                movie_data=movie_data._append(df2_family)   
+                movie_data=movie_data._append(df2_family)
+                data2=data2._append(df3_sad)   
 
-    return data,movie_data
+    return data,movie_data,data2
 
 def pre(l):
     result = [item for items,c in Counter(l).most_common() for item in [items] * c]
@@ -294,12 +334,13 @@ with col2:
 
         list=pre(list)
     if st.button('Go By Text (Click Here)'):
-        chat.chatbot_func()
+        pass
+
 
 with col3:
     pass
 
-new_df,movie_data=fun(list)
+new_df,movie_data,data2=fun(list)
 
 st.write("")
 
@@ -309,10 +350,21 @@ try:
     st.markdown("<h2 style='text-align:center;color:grey;'><b>Songs With Artist Names</b></h2>",unsafe_allow_html=True)
 
     st.write("-------------------------------------------------------------------------------------------------------")
-    for l,a,n,i in zip(new_df["link"],new_df['artist'],new_df['name'],range(30)):
-        st.markdown("""<h4 style='text-align:center;'><a href={}>{} - {}</a></h4>""".format(l,i+1,n),unsafe_allow_html=True)
+    no=1
+    for l,a,n,i in zip(new_df["link"],new_df['artist'],new_df['name'],range(15)):
+        st.markdown("""<h4 style='text-align:center;'><a href={}>{} - {} (English)</a></h4>""".format(l,no,n),unsafe_allow_html=True)
         st.markdown("<h4 style='text-align:center;color:grey'><i>{}</i></h5>".format(a),unsafe_allow_html=True)
         st.write("-------------------------------------------------------------------------------------------------------")
+        no=no+1
+    i=1
+    for index,row in data2.iterrows():
+        st.markdown("""<h4 style='text-align:center;'><a href={}>{} - {} ({})</a></h4>""".format(row['Source'],no,row['Song  Name'],row['Language']),unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;color:grey'><i>{}</i></h5>".format(row['Artist']),unsafe_allow_html=True)
+        st.write("-------------------------------------------------------------------------------------------------------")
+        if(i>70):
+            break
+        i=i+1
+        no=no+1
     st.markdown("<h2 style='text-align:center;color:grey;'><b>Movies With Director Names</b></h2>",unsafe_allow_html=True)
     i=1
     for index,row in movie_data.iterrows():
